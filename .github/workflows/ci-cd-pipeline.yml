@@ -82,8 +82,10 @@ jobs:
       run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
  
     - name: Start Java App Spring PetClinic on EC2 instance
+    # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << EOF
           pkill -f 'java -jar' || true
           nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &
-        EOF # redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
+        EOF 
+        
