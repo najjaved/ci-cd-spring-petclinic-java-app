@@ -26,8 +26,6 @@ jobs:
         java-version: ${{matrix.java}}
         distribution: 'adopt'
         cache: maven
-    - name: Grant execute permission for Maven wrapper
-      run: chmod +x mvnw
 
     - name: Cache Maven packages
       uses: actions/cache@v4 # Caches Maven dependencies to speed up subsequent builds
@@ -36,8 +34,13 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }} # cache key is used to identify the cached data
         restore-keys: ${{ runner.os }}-m2 # fallback cache keys to restore a more general cache, if the pom.xml files have changed, but the OS and maven locations have not
 
-    - name: Build and test with Maven Wrapper
-      run: ./mvnw clean verify
+     # Grant execute permission for Maven wrapper and Build, see also ./mvnw clean verify 
+    - name: Build with Maven Wrapper
+      run: |
+          chmod +x mvnw
+          ./mvnw -B package --file pom.xml
+    - name: Run Unit Tests
+      run: ./mvnw test
 
     - name: Copy generated artifact to staging directory
       run: mkdir staging && cp target/*.jar staging
@@ -80,8 +83,8 @@ jobs:
       run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
     - name: Deploy JAR to EC2
-      run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
+      run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
  
     - name: Start Java App Spring PetClinic on EC2 instance
     # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
-      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "pkill -f 'java -jar' || true; nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &"   
+      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "pkill -f 'java -jar' || true; nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
