@@ -26,6 +26,8 @@ jobs:
         java-version: ${{matrix.java}}
         distribution: 'adopt'
         cache: maven
+    - name: Grant execute permission for Maven wrapper
+      run: chmod +x mvnw
 
     - name: Cache Maven packages
       uses: actions/cache@v4 # Caches Maven dependencies to speed up subsequent builds
