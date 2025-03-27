@@ -36,10 +36,8 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }} # cache key is used to identify the cached data
         restore-keys: ${{ runner.os }}-m2 # fallback cache keys to restore a more general cache, if the pom.xml files have changed, but the OS and maven locations have not
 
-    - name: Build with Maven Wrapper # Builds the Java application using Maven wrapper mvnw
-      run: ./mvnw -B verify
-    - name: Run Unit Tests # Runs the unit tests
-      run: ./mvnw test
+    - name: Build and test with Maven Wrapper
+      run: ./mvnw clean verify
 
     - name: Copy generated artifact to staging directory
       run: mkdir staging && cp target/*.jar staging
