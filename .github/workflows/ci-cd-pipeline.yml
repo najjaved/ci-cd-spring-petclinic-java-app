@@ -38,6 +38,9 @@ jobs:
       run: ./mvnw -B verify
     - name: Run Unit Tests # Runs the unit tests
       run: ./mvnw test
+
+    - name: Copy generated artifact to staging directory
+      run: mkdir staging && cp target/*.jar staging
     
     - name: Cache SonarQube packages # Runs SonarQube code analysis, check if the Sonarqube's EC2 instance's security group allows inbound traffic on port 9000 from the GitHub Actions runners
       uses: actions/cache@v4
@@ -50,3 +53,9 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Java-lab -Dsonar.projectName='Java-lab'
+    
+    - name: Publish Artifacts    
+      uses: actions/upload-artifact@v4  # Uploads the generated artifact (.jar file)
+      with:
+        name: application-artifact
+        path: staging
