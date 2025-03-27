@@ -87,5 +87,4 @@ jobs:
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << EOF
           pkill -f 'java -jar' || true
           nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &
-        EOF 
-        
+        EOF     
