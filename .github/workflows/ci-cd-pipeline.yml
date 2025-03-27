@@ -59,3 +59,14 @@ jobs:
       with:
         name: application-artifact
         path: staging
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: application-artifact
+        path: staging
