@@ -1,0 +1,3 @@
+# The dco.yml file with members: false enforces DCO compliance for all contributions to the repository.
+require:
+  members: false
