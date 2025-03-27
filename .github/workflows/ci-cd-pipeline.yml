@@ -78,6 +78,9 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.EC2_PRIVATE_KEY }}
 
+    - name: Test SSH Connection
+      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
+
     - name: Deploy JAR to EC2
       run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
  
