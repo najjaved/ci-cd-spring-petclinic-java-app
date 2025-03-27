@@ -72,3 +72,17 @@ jobs:
       with:
         name: application-artifact
         path: staging
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.EC2_PRIVATE_KEY }}
+
+    - name: Deploy JAR to EC2
+      run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/app.jar
+ 
+    - name: Start Java App Spring PetClinic on EC2 instance
+      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << EOF
+          pkill -f 'java -jar' || true
+          nohup java -jar /home/ubuntu/app.jar > app.log 2>&1 &
+        EOF # redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
