@@ -1,3 +1,4 @@
+---
 name: Java CI and CD Pipeline with Maven
 
 # Triggers the workflow on code pushes to the cicd-workflow branch and on pull requests targeting the cicd-workflow branch
@@ -83,8 +84,11 @@ jobs:
 
     - name: Clean up and deploy JAR to EC2 server
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "rm -f /home/ubuntu/*.jar /home/ubuntu/*.log && scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "rm -f /home/ubuntu/*.jar /home/ubuntu/*.log && 
+        scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/"
  
     - name: Start Java App Spring PetClinic on EC2 instance
     # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
-      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "pkill -f 'java -jar' || true; nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
+      run: |
+       ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "pkill -f 'java -jar' || true; 
+       nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
