@@ -43,8 +43,13 @@ jobs:
     - name: Run Unit Tests
       run: ./mvnw test
 
+    - name: List target directory
+      run: ls -l target/
+
     - name: Copy generated artifact to staging directory
-      run: mkdir staging && cp target/*.jar staging
+      run: mkdir staging && cp target/*.jar staging   
+    - name: List staging directory
+      run: ls -l staging/
     
     - name: Cache SonarQube packages # Runs SonarQube code analysis, check if the Sonarqube's EC2 instance's security group allows inbound traffic on port 9000 from the GitHub Actions runners
       uses: actions/cache@v4
