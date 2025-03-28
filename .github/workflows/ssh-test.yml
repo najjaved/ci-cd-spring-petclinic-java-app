@@ -2,7 +2,7 @@ name: SSH Test!
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "cicd-workflow" ]
   workflow_dispatch:
 
 jobs:
@@ -27,3 +27,8 @@ jobs:
 
         - name: print diogo from ec2
           run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "cat my-file"
+
+        - name: Start Java App Spring PetClinic on EC2 instance
+          # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
+          run: |
+                ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"
