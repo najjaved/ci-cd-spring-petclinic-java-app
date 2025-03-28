@@ -26,4 +26,4 @@ jobs:
         - name: Start Java App Spring PetClinic on EC2 instance
           # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
           run: |
-            ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "sudo pkill -f 'java -jar' || true; sudo nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
+            ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
