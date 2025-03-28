@@ -2,7 +2,7 @@ name: SSH Test!
 
 on:
   push:
-    branches: [ "cicd-workflow" ]
+    branches: [ "test" ]
   workflow_dispatch:
 
 jobs:

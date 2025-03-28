@@ -4,9 +4,9 @@ name: Java CI and CD Pipeline with Maven
 # Triggers the workflow on code pushes to the cicd-workflow branch and on pull requests targeting the cicd-workflow branch
 on:
   push:
-    branches: [ "main-workflow" ]
+    branches: [ "cicd-workflow" ]
   pull_request:
-    branches: [ "main-workflow" ]
+    branches: [ "cicd-workflow" ]
 
 jobs:
   build:
