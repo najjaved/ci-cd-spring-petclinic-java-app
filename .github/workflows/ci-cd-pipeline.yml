@@ -86,10 +86,10 @@ jobs:
     - name: Test SSH Connection
       run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "echo 'SSH connection successful'"
 
-    - name: Clean up and deploy JAR to EC2 server
+    - name: Deploy JAR to EC2 server
       run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
  
     - name: Start Java App Spring PetClinic on EC2 instance
     # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
       run: |
-       ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "pkill -f 'java -jar' || true; nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
+       ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "sudo pkill -f 'java -jar' || true; sudo nohup java -jar /home/ubuntu/spring-petclinic-*.jar > app.log 2>&1 &"   
