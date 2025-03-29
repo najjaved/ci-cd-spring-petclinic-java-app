@@ -83,15 +83,15 @@ jobs:
       uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.EC2_PRIVATE_KEY }}
-    - name: Remove any existing app (Kill process on port 8080 on remote host)
-      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "fuser -k 8080/tcp || true"
+    - name: Ensure Java is installed on remote server
+      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} \
+          "sudo apt update && sudo apt install -y openjdk-17-jre"
 
     - name: Deploy JAR to EC2 server
       run: scp -o StrictHostKeyChecking=no staging/*.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
-    
-    - name: Ensure Java is installed on remote
-      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} \
-        "sudo apt update && sudo apt install -y openjdk-17-jre"
+       
+    - name: Remove any existing app (Kill process on port 8080 on remote host)
+      run: ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "fuser -k 8080/tcp || true"
  
     - name: Start Java App Spring PetClinic on EC2 instance
     # Restart the java app on EC2 and redirect both standard output and standard error from the Java application to the app.log file and runs the application in the background
