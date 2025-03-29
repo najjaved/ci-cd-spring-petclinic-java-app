@@ -2,7 +2,7 @@ name: SSH Test!
 
 on:
   push:
-    branches: [ "test" ]
+    branches: [ test ]
   workflow_dispatch:
 
 jobs:
